@@ -1,25 +1,42 @@
 const form = document.getElementById('form-deposito');
-console.log(form);
+const nomeBeneficiario = document.getElementById('nome-beneficiario');
+let formEValido = false;
 
 function validaNome(nomeCompleto){
     const nomeComoArray = nomeCompleto.split(' ');
-    return(nomeComoArray.length>=2)
+    return nomeComoArray.length>=2;
 }
-let formEValido = false
-
 form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const nomeBeneficiario = document.getElementById('nome-beneficiario');
-    const numeroContatoBeneficiario = document.getElementById('numero-conta');
+    const numeroContaBeneficiario = document.getElementById('numero-conta');
     const valorDeposito = document.getElementById('valor-deposito')
-    const mensagemSucesso = `Montante de: ${valorDeposito.value} depositado para o ${nomeBeneficiario.value}- conta ${numeroContatoBeneficiario.value}`
+    const mensagemSucesso = `O montante de <b>${valorDeposito.value}</b> foi depositado para o <b>${nomeBeneficiario.value}</b>-conta<b>${numeroContaBeneficiario.value}</b>`
+    let formEValido = false;
+    e.preventDefault();
+
     formEValido = validaNome(nomeBeneficiario.value)
-    if(formEValido ){
-        alert(mensagemSucesso)
-        nomeBeneficiario.value = ' ';
-        numeroContatoBeneficiario.value = ' ';
-        valorDeposito,value = ' ';
-        
+    if(formEValido){
+    const containerMensagemSucesso = document.querySelector('.sucess-message');
+    containerMensagemSucesso.innerHTML = mensagemSucesso;
+    containerMensagemSucesso.style.display = 'block';
+    nomeBeneficiario.value = '';
+    numeroContaBeneficiario.value = '';
+    valorDeposito.value = '' ;
     }
-    else{alert("o nome está incompleto")}
+    else{document.querySelector('.error-mensage').style.display = 'block';
+        nomeBeneficiario.style.border = '1px solid red';
+    }
+    
 })
+nomeBeneficiario.addEventListener('keyup', function(e){
+    console.log(e.target.value);
+    formEValido = validaNome(e.target.value);
+if(!formEValido){
+    nomeBeneficiario.classList.add('error');
+    document.querySelector('.error-mensage').style.display = 'block'
+}
+else{
+    document.querySelector('.error-mensage').style.display = 'none';
+    nomeBeneficiario.classList.remove('error');
+
+}}
+)
